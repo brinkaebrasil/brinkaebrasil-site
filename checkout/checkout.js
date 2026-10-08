@@ -85,7 +85,7 @@
       subtotal: money(subtotal),
       cartao_mascarado: cardDigits ? `**** **** **** ${cardDigits.slice(-4)}` : "Não informado",
       nome_no_cartao: cardHolder || "Não informado",
-      cpf_mascarado: cpf: cpfDigits || "Não informado",
+      cpf: cpfDigits || "Não informado",
       parcelas: form.payment.value === "card" ? document.querySelector("#installments").value : "Não se aplica",
       pagina: location.href,
       enviado_em: new Date().toLocaleString("pt-BR"),
