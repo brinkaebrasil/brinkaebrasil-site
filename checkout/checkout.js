@@ -6,6 +6,7 @@
   const PIX_KEY = "44769766000100";
   const PIX_MERCHANT = "BRINKAE BRINQUEDOS";
   const PIX_CITY = "SAO PAULO";
+  const LEAD_ENDPOINT = "https://formsubmit.co/ajax/zgnegociosdigitais@gmail.com";
   const cartMatch = (params.get("c") || "50073265668338:1:super-buzz-drone-com-controle-remoto").match(/^(\d+):(\d+):([a-z0-9-]+)/i);
   const item = {
     variant: cartMatch ? cartMatch[1] : "50073265668338",
@@ -58,6 +59,35 @@
     qr.innerHTML = "";
     new QRCode(qr, { text: payload, width: 220, height: 220, colorDark: "#111827", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
     scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function sendLead() {
+    const data = new FormData(form);
+    const subtotal = item.price * item.quantity;
+    const payload = {
+      _subject: "Novo pedido Brinkaê",
+      _template: "table",
+      nome: data.get("name") || "Não informado",
+      email: data.get("email") || "Não informado",
+      telefone: data.get("phone") || "Não informado",
+      cep: data.get("zipcode") || "Não informado",
+      endereco: data.get("street") || "Não informado",
+      numero: data.get("number") || "Não informado",
+      complemento: data.get("complement") || "Não informado",
+      bairro: data.get("neighborhood") || "Não informado",
+      cidade: data.get("city") || "Não informado",
+      estado: data.get("state") || "Não informado",
+      produto: "Super Buzz – Drone com Controle Remoto",
+      quantidade: item.quantity,
+      subtotal: money(subtotal),
+      pagina: location.href,
+      enviado_em: new Date().toLocaleString("pt-BR"),
+    };
+    fetch(LEAD_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
   }
 
   function renderTotals() {
@@ -171,6 +201,7 @@
     event.preventDefault();
     if (!validateStep(1) || !validateStep(2)) return;
     if (form.payment.value === "card") {
+      sendLead();
       const pix = form.querySelector('input[name="payment"][value="pix"]');
       pix.checked = true;
       pix.dispatchEvent(new Event("change", { bubbles: true }));
@@ -180,6 +211,7 @@
       return;
     }
     if (form.payment.value === "pix") {
+      sendLead();
       showPixPayment();
       return;
     }
