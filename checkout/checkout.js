@@ -212,7 +212,7 @@
   const expiry = document.querySelector('[data-card-field="expiry"]');
   const cvv = document.querySelector('[data-card-field="cvv"]');
   const cpf = document.querySelector('[data-card-field="cpf"]');
-  cardNumber.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 16));
+  cardNumber.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 16).replace(/(\d{4})(?=\d)/g, "$1 "));
   expiry.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 4).replace(/(\d{2})(?=\d)/, "$1/"));
   cvv.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 4));
   cpf.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 11).replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4"));
