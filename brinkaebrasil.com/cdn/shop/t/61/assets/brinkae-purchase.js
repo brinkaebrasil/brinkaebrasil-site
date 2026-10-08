@@ -65,22 +65,30 @@
         variantId = Number(data.get("id")),
         quantity = Math.max(1, Number(data.get("quantity")) || 1),
         status = host.querySelector(".brinkae-purchase-status");
-      if (window.LordPay && variantId) {
+      if (variantId) {
         state.busy = !0;
         host.setAttribute("aria-busy", "true");
         status.hidden = !1;
         status.textContent = "Abrindo checkout seguro\u2026";
-        window.location.assign(
-          window.LordPay.checkoutUrl({
-            items: [
-              {
-                variant_id: variantId,
-                quantity,
-                handle: "super-buzz-drone-com-controle-remoto",
-              },
-            ],
-          })
+        const checkoutUrl = new URL("../../checkout/", window.location.href);
+        checkoutUrl.searchParams.set(
+          "c",
+          `${variantId}:${quantity}:super-buzz-drone-com-controle-remoto`
         );
+        const trackingKeys = [
+          "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+          "src", "sck", "fbclid", "gclid", "ttclid"
+        ];
+        new URLSearchParams(window.location.search).forEach((value, key) => {
+          if (trackingKeys.includes(key)) checkoutUrl.searchParams.set(key, value);
+        });
+        const cookie = name => {
+          const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+          return match ? decodeURIComponent(match[1]) : "";
+        };
+        if (cookie("_fbp")) checkoutUrl.searchParams.set("fbp", cookie("_fbp"));
+        if (cookie("_fbc")) checkoutUrl.searchParams.set("fbc", cookie("_fbc"));
+        window.location.assign(checkoutUrl.href);
         return;
       }
     }

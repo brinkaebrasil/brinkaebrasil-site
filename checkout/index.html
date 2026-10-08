@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Finalizar compra | Brinkaê</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="header">
+      <a class="brand" href="../brinkaebrasil.com/products/super-buzz-drone-com-controle-remoto.html" aria-label="Voltar para a Brinkaê">
+        <img src="https://assetsglobalbr.com/u/checkout/26653145.png" alt="Brinkaê Brinquedos">
+      </a>
+      <span class="secure">🔒 Compra segura</span>
+    </header>
+
+    <div class="notice">Falta pouco! Preencha seus dados corretamente para receber seu pedido com segurança e agilidade.</div>
+
+    <main class="layout">
+      <div class="checkout-column">
+        <ol class="progress" aria-label="Etapas da compra">
+          <li class="active" data-progress="1"><span>1</span><b>Identificação</b></li>
+          <li data-progress="2"><span>2</span><b>Entrega</b></li>
+          <li data-progress="3"><span>3</span><b>Pagamento</b></li>
+        </ol>
+
+        <form id="checkout-form" novalidate>
+          <section class="step active" data-step="1">
+            <div class="step-heading"><span>1</span><div><h1>Identificação</h1><p>Preencha seus dados para envio do pedido.</p></div></div>
+            <div class="fields">
+              <label>Nome completo<input name="name" autocomplete="name" placeholder="Digite seu nome completo" required minlength="3"></label>
+              <label>E-mail<input name="email" type="email" autocomplete="email" placeholder="Digite seu e-mail" required></label>
+              <label>Celular / WhatsApp<input name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(00) 00000-0000" required></label>
+            </div>
+            <button class="primary" type="button" data-next="2">Continuar para entrega</button>
+          </section>
+
+          <section class="step" data-step="2">
+            <div class="step-heading"><span>2</span><div><h2>Entrega</h2><p>Informe o endereço onde deseja receber.</p></div></div>
+            <div class="fields">
+              <label>CEP<input name="zipcode" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></label>
+              <p class="cep-status" aria-live="polite"></p>
+              <div class="grid two-one">
+                <label>Endereço<input name="street" autocomplete="address-line1" placeholder="Rua ou avenida" required></label>
+                <label>Número<input name="number" inputmode="numeric" placeholder="Nº" required></label>
+              </div>
+              <label>Complemento <small>(opcional)</small><input name="complement" autocomplete="address-line2" placeholder="Apartamento, bloco, referência"></label>
+              <label>Bairro<input name="neighborhood" placeholder="Bairro" required></label>
+              <div class="grid city-state">
+                <label>Cidade<input name="city" autocomplete="address-level2" placeholder="Cidade" required></label>
+                <label>Estado<input name="state" autocomplete="address-level1" maxlength="2" placeholder="UF" required></label>
+              </div>
+              <label class="shipping"><input type="radio" checked> <span><b>Entrega padrão</b><small>Frete grátis</small></span><strong>GRÁTIS</strong></label>
+            </div>
+            <div class="actions"><button class="secondary" type="button" data-back="1">Voltar</button><button class="primary" type="button" data-next="3">Continuar para pagamento</button></div>
+          </section>
+
+          <section class="step" data-step="3">
+            <div class="step-heading"><span>3</span><div><h2>Pagamento</h2><p>Escolha como deseja pagar.</p></div></div>
+            <div class="payment-options">
+              <label class="payment selected"><input type="radio" name="payment" value="pix" checked><span><b>Pix</b><small>Aprovação imediata</small></span><strong>10% OFF</strong></label>
+              <label class="payment"><input type="radio" name="payment" value="card"><span><b>Cartão de crédito</b><small>Parcele sua compra com segurança</small></span></label>
+            </div>
+            <p class="payment-note">Seus dados de pagamento serão protegidos e processados no ambiente seguro da Brinkaê.</p>
+            <div class="actions"><button class="secondary" type="button" data-back="2">Voltar</button><button class="primary" type="submit">Ir para o pagamento seguro</button></div>
+          </section>
+        </form>
+      </div>
+
+      <aside class="summary">
+        <h2>Resumo do pedido</h2>
+        <div class="product">
+          <img src="../brinkaebrasil.com/cdn/shop/files/download_5.gif" alt="Super Buzz – Drone com Controle Remoto">
+          <div><b>Super Buzz – Drone com Controle Remoto</b><div class="quantity"><button type="button" data-qty="-1" aria-label="Diminuir quantidade">−</button><span id="quantity">1</span><button type="button" data-qty="1" aria-label="Aumentar quantidade">+</button></div></div>
+          <span id="product-total">R$ 169,90</span>
+        </div>
+        <dl>
+          <div><dt>Produtos</dt><dd id="subtotal">R$ 169,90</dd></div>
+          <div><dt>Frete</dt><dd class="free">GRÁTIS</dd></div>
+          <div class="total"><dt>Total</dt><dd id="total">R$ 169,90</dd></div>
+        </dl>
+        <p class="pix-total">ou <b id="pix-total">R$ 152,91</b> no Pix (10% OFF)</p>
+        <div class="trust"><span>🔒 Pagamento seguro</span><span>✓ Compra protegida</span></div>
+      </aside>
+    </main>
+
+    <footer>© Brinkaê Brinquedos · Ambiente seguro</footer>
+    <div class="loading" hidden><span></span><b>Preparando pagamento seguro…</b></div>
+    <script src="checkout.js"></script>
+  </body>
+</html>
