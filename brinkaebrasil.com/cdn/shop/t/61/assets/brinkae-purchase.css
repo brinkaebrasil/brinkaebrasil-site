@@ -1,0 +1,94 @@
+[data-brinkae-purchase] .brinkae-add-cart {
+  background: #fff;
+  color: #008a4b;
+  border: 2px solid #009c57;
+  border-radius: 8px;
+  min-height: 52px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+[data-brinkae-purchase] .brinkae-add-cart:before,
+[data-brinkae-purchase] .brinkae-add-cart:after {
+  box-shadow: none;
+}
+[data-brinkae-purchase] .brinkae-add-cart:hover {
+  background: #f1faf5;
+}
+[data-brinkae-purchase] .brinkae-add-cart:focus-visible {
+  outline: 2px solid #222;
+  outline-offset: 3px;
+}
+[data-brinkae-purchase] .brinkae-purchase-status {
+  margin: 10px 0 0;
+  font-size: 14px;
+}
+[data-brinkae-purchase] .brinkae-cart-link {
+  color: #008a4b;
+  font-size: 14px;
+}
+[data-brinkae-purchase][aria-busy="true"] button {
+  pointer-events: none;
+  opacity: 0.65;
+}
+product-form[data-brinkae-purchase] button.brinkae-add-cart,
+product-form[data-brinkae-purchase] button.brinkae-add-cart:hover,
+product-form[data-brinkae-purchase] button.brinkae-add-cart:focus {
+  --color-button: 255, 255, 255;
+  --color-button-text: 0, 138, 75;
+  background: #fff !important;
+  background-image: none !important;
+  color: #008a4b !important;
+  border: 2px solid #009c57 !important;
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+product-form[data-brinkae-purchase] button.brinkae-add-cart:before,
+product-form[data-brinkae-purchase] button.brinkae-add-cart:after {
+  content: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+product-form[data-brinkae-purchase]
+  button.brinkae-add-cart[data-feedback="loading"]:before {
+  content: "" !important;
+  display: block;
+  position: static;
+  inset: auto;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  box-sizing: border-box;
+  border: 2px solid #b8dfca;
+  border-top-color: #008a4b;
+  border-radius: 50%;
+  animation: brinkae-spin 0.65s linear infinite;
+}
+product-form[data-brinkae-purchase]
+  button.brinkae-add-cart[data-feedback="success"] {
+  background: #edf9f2 !important;
+  animation: brinkae-confirm 0.32s ease-out;
+}
+@keyframes brinkae-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes brinkae-confirm {
+  50% {
+    transform: scale(1.025);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  product-form[data-brinkae-purchase] button.brinkae-add-cart {
+    animation: none !important;
+  }
+  product-form[data-brinkae-purchase] button.brinkae-add-cart:before {
+    animation: none !important;
+  }
+}
+/*# sourceMappingURL=/cdn/shop/t/61/assets/brinkae-purchase.css.map?v=62815793398310878651791164981 */

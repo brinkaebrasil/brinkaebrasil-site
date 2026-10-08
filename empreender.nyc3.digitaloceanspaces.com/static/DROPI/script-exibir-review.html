@@ -1,0 +1,263 @@
+//https://app.dropi.com.br/js/script-exibir-review.js by jar (async
+function(){(async function(){var f=null;let m=null;const
+p=(d,c)=>{if(!Array.isArray(d)||0==d.length)return[];switch(c){case 1:return
+d.sort((a,b)=>parseFloat(a.data_avaliacao_segundos)-parseFloat(b.data_avaliacao_segundos));case
+2:return
+d.sort((a,b)=>parseFloat(b.data_avaliacao_segundos)-parseFloat(a.data_avaliacao_segundos));default:return
+d}};let e={};const q=async(d,c,a,b=!1)=>{b&&"string"==typeof
+b&&(b=JSON.parse(b));c=await
+fetch("https://public.empreender.app/dropi/events",{method:"POST",
+headers:{"Content-Type":"application/json"},body:JSON.stringify({event:d,ref1_id:c,ref2_id:a,extras:b?b:{}})});200==c.status&&(c=await
+c.json(),console.log(`evt ${d} ->`,c))},r=async(d,c=!1)=>{c&&"string"==typeof
+c&&(c=JSON.parse(c));c=await
+fetch("https://public.empreender.app/evtcontatos/events",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({event:d,ref1_id:"DROPI",mode:"private",extras:c?c:{}})});200==c.status&&(c=await
+c.json(),console.log(`evt ${d} ->`,c))},l= async d=>{let c="";var
+a="";switch(d){case
+"nuvemshop":c=`https://empreender.nyc3.digitaloceanspaces.com/dropi/nuvemshop/${LS.store.id}/review-configs`;a=`https://empreender.nyc3.digitaloceanspaces.com/dropi/nuvemshop/product/${LS.product.id}/reviews`;e.ref1_id=LS.store.id;e.ref2_id=d;e.product_id=LS.product.id;LS.customer&&(e.customer_id=LS.customer);LS.product.name&&(e.product_name=LS.product.name);break;case
+"shopify":c=`https://empreender.nyc3.digitaloceanspaces.com/dropi/shopify/${Shopify.shop}/review-configs`;
+a=`https://empreender.nyc3.digitaloceanspaces.com/dropi/shopify/product/${ShopifyAnalytics.meta.product.id}/reviews`;e.ref1_id=Shopify.shop;e.ref2_id=d;e.product_id=ShopifyAnalytics.meta.product.id;break;case
+"cartpanda":try{var
+b=!1,h=document.getElementById("ProductJson");h?b=JSON.parse(h.innerHTML):(h=document.querySelector("[data-product-json]"),b=JSON.parse(h.innerHTML),b=b?.product);b&&(c=`https://empreender.nyc3.digitaloceanspaces.com/dropi/cartpanda/${onCartx.oncartx_domain}/review-configs`,
+a=`https://empreender.nyc3.digitaloceanspaces.com/dropi/cartpanda/product/${b.id}/reviews`,e.ref1_id=onCartx.oncartx_domain,e.ref2_id=d,e.product_id=b.id)}catch(k){}break;case
+"dooca":"product"==dooca?.template&&(c=`https://empreender.nyc3.digitaloceanspaces.com/dropi/dooca/${dooca.shop_id}/review-configs`,a=`https://empreender.nyc3.digitaloceanspaces.com/dropi/dooca/${dooca.shop_id}/product/${dooca.product.id}/reviews`,e.ref1_id=dooca.shop_id,e.ref2_id=d,e.product_id=dooca.product.id);break;case
+"lpqv":window.baseStore&&
+LPQV.product_id&&(c=`https://empreender.nyc3.digitaloceanspaces.com/dropi/lpqv/${window.baseStore}/review-configs`,a=`https://empreender.nyc3.digitaloceanspaces.com/dropi/lpqv/${window.baseStore}/product/${LPQV.product_id}/reviews`,e.ref1_id=window.baseStore,e.ref2_id=d,e.product_id=LPQV.product_id);break;case
+"wellcommerce":b=!1;h=WapStore?.produto?.id;const
+g=document.querySelector('script[src*="static/DROPI/script-exibir-review.js"]');g&&(b=(new
+URL(g.src)).searchParams.get("store"));b&&h&&(c=
+`https://empreender.nyc3.digitaloceanspaces.com/dropi/wellcommerce/${b}/review-configs`,a=`https://empreender.nyc3.digitaloceanspaces.com/dropi/wellcommerce/${b}/product/${h}/reviews`,e.ref1_id=b,e.ref2_id=d,e.product_id=h);break;case
+"yampi":window.merchant.id&&anaParams.product_id&&(c=`https://empreender.nyc3.digitaloceanspaces.com/dropi/yampi/${window.merchant.id}/review-configs`,a=`https://empreender.nyc3.digitaloceanspaces.com/dropi/yampi/${window.merchant.id}/product/${anaParams.product_id}/reviews`,
+e.ref1_id=window.merchant.id,e.ref2_id=d,e.product_id=anaParams.product_id)}if(c&&(d=await
+fetch(c),200==d.status||304==d.status)){d=await d.json();console.log("configs
+cdn",d);if(1==d.rev_hide)return!1;a=await
+fetch(a);if(200==a.status||304==a.status)return a=await
+a.json(),console.log("reviews
+cdn",a),1==d.rev_show_stars&&(d.product_stars=a.product_stars),{success:1,preferences:d,reviews:Array.isArray(a.reviews)?p(a.reviews,d.rev_order):[]}}return
+null};if("undefined"!==typeof LS&&LS.product)f= await l("nuvemshop");else
+if("undefined"!==typeof Shopify&&void
+0!==Shopify.shop&&ShopifyAnalytics?.meta?.product?.id)f=await l("shopify");else
+if("undefined"!==typeof
+onCartx&&""!=onCartx.oncartx_domain&&(document.getElementById("ProductJson")||document.querySelector("[data-product-json]")))f=await
+l("cartpanda");else if("undefined"!==typeof dooca&&""!=dooca?.shop_id)f=await
+l("dooca");else if("undefined"!==typeof LPQV&&window.baseStore)f=await
+l("lpqv");else if("undefined"!==typeof WapStore&&WapStore?.produto?.id)f= await
+l("wellcommerce");else if("undefined"!==typeof Yampi)f=await l("yampi");else
+try{let d=document.currentScript.src.match(/\?.*/)[0],c=new
+URLSearchParams(d);m=c.get("chave");let
+a=c.get("produto"),b=c.get("take");null!=m&&(f=await
+fetch(`https://app.dropi.com.br/avaliacoes/dropi/${m}/${a}/${b}`),f=await
+f.json())}catch(d){}if(f&&f.success&&0<f.reviews.length){const
+d=f.reviews,c=f.preferences?f.preferences:{};if(c.product_stars){f=document.createElement("span");f.id="average-review-container";
+f.dataset.drSendEventOnclick=JSON.stringify({product_id:e.product_id});f.dataset.drEventName="click_stars_avg_review";f.classList.add("dropi-star-view");f.style.cursor="pointer";f.innerHTML=`<span
+  style="width:${20*c.product_stars.stars_average}%"
+></span
+>`;const
+a=document.createElement("div");a.style.display="flex";a.style.marginBottom="12px";a.appendChild(f);780>window.innerWidth&&(a.style.justifyContent="start");"undefined"!==typeof
+LS&&LS.product&&("style"==LS.theme.code?(a.style.clear="both",
+document.querySelector(`[data-store="product-name-${LS.product.id}"]`).after(a)):"luxury"==LS.theme.code?((f=document.querySelector(`[data-store="product-name-${LS.product.id}"]`))||(f=document.querySelector('[itemprop="name"]')),f&&f.after(a)):"zen"==LS.theme.code?(a.style.justifyContent="center",document.querySelector(`[data-store="product-name-${LS.product.id}"]`).after(a)):"material"==LS.theme.code?document.querySelector(`[data-store="product-price-${LS.product.id}"]`).after(a):document.querySelector(`[data-store="product-name-${LS.product.id}"]`)?
+document.querySelector(`[data-store="product-name-${LS.product.id}"]`).after(a):document.querySelector(".product-title")?.after(a));if("undefined"!==typeof
+Shopify&&void
+0!==Shopify.shop&&!document.getElementById("average-review-container")){if("Convertex
+4.0
+shopify"==Shopify.theme.name||"Dropmeta-4.4"==Shopify.theme.name)a.style.justifyContent="start";document.querySelector(".subtitle")?document.querySelector(".subtitle").after(a):0<document.querySelectorAll(".product-single__title").length?(f=
+a.cloneNode(!0),f.addEventListener("click",function(){const
+b=document.getElementById("dropi-review-app").offsetTop;window.scrollTo(0,b-100)}),document.querySelector(".small--hide.text-center
+> .product-single__title")?(document.querySelector(".small--hide.text-center >
+.product-single__title").after(f),a.style.display="flex",a.style.marginTop="14px",a.style.justifyContent="center",document.querySelector(".medium--hide.large--hide.text-center
+>
+.product-single__title").after(a)):document.querySelector(".product-single__title.heading")?
+document.querySelector(".product-single__title.heading").after(f):document.querySelector(".product-single__title").after(f)):0<document.querySelectorAll(".product-single__title
++ .review-badge").length?document.querySelectorAll(".product-single__title +
+.review-badge").forEach(b=>{b.insertAdjacentElement("afterend",a)}):document.querySelector(".product__title")?document.querySelector(".product__title")?.after(a):document.querySelector(".product-meta__title")?document.querySelector(".product-meta__title")?.after(a):
+document.querySelector(".productView-title")?document.querySelector(".productView-title")?.after(a):"e8627e-bd.myshopify.com"==Shopify.shop&&document.querySelector(".pr_title")?document.querySelector(".pr_title").after(a):document.querySelector(".product-title")?.after(a)}"undefined"===typeof
+onCartx||""==onCartx.oncartx_domain||document.getElementById("average-review-container")||("BLACK"==onCartx.theme.name&&"main"==onCartx.theme.role&&document.querySelector(".product-title")?(a.style.justifyContent=
+"start",document.querySelector(".product-title").after(a)):document.querySelector(".product-single__title")?document.querySelector(".product-single__title").after(a):document.querySelector(".product-price.new-price")?document.querySelector(".product-price").after(a):document.querySelector(".product-price")?(a.style.marginLeft="15px",document.querySelector(".product-price").after(a)):document.querySelector(".ops-price")?document.querySelector(".ops-price").after(a):"TEMA-CARTPANDA-2.0"==onCartx.theme.name&&
+document.querySelector(".product-meta__title")?document.querySelector(".product-meta__title").after(a):document.querySelector(".product-meta")?(a.style.marginTop="16px",document.querySelector(".product-meta").after(a)):document.querySelector(".tt-price")&&document.querySelector(".tt-price").after(a));"undefined"===typeof
+dooca||""==dooca.shop_id||document.getElementById("average-review-container")||document.querySelector(".NETREVIEWS_PRODUCT_STARS")?.after(a);"undefined"!==typeof
+LPQV&&window.baseStore&&
+document.querySelector(".produto-det-stars")?.after(a);"undefined"!==typeof
+WapStore&&WapStore?.produto?.id&&(a.style.marginBottom="",document.querySelector(".avaliacao-media")?.after(a));"undefined"!==typeof
+Yampi&&(a.style.marginBottom="",a.style.marginTop="8px",document.querySelector(".main-product-name")?.after(a))}(function(a,b){var
+h=document.getElementsByTagName("head")[0],g=document.createElement("script");g.type="text/javascript";g.src=a;g.onreadystatechange=b;g.onload=b;h.appendChild(g)})("https://empreender.nyc3.digitaloceanspaces.com/static/DROPI/fslightbox",
+function(){let
+a=document.getElementById("reviewsapp");if(null!=m)a.style="position: absolute
+!important;top:0;left:0;right:0;";else{var
+b=document.createElement("div");b.id="dropi-review-app";if("undefined"!==typeof
+Shopify&&void
+0!==Shopify.shop){if(document.getElementById("dropi-review-app"))return;a||("1978f1-2.myshopify.com"==Shopify.shop&&document.querySelector(".shopify-section--product-content")?document.querySelector(".shopify-section--product-content").after(b):"e8627e-bd.myshopify.com"==
+Shopify.shop&&document.querySelector("#ptabReview")?document.querySelector("#ptabReview").append(b):"mjmkgq-e3.myshopify.com"==Shopify.shop&&document.querySelector(".shopify-section--product-content")?document.querySelector(".shopify-section--product-content").after(b):document.querySelector("main
+> section")?document.querySelector("main >
+section").after(b):document.querySelector("#shopify-section-product-template")?document.querySelector("#shopify-section-product-template").after(b):document.querySelector('section[data-section-id="product-template"]')?
+document.querySelector('section[data-section-id="product-template"]')?.after(b):document.querySelector("#shopify-product-reviews")?document.querySelector("#shopify-product-reviews")?.after(b):document.querySelector("#shopify-ali-review")?document.querySelector("#shopify-ali-review").after(b):document.querySelector("#shopify-section-product-template-default")?document.querySelector("#shopify-section-product-template-default")?.after(b):document.querySelector('[id^="shopify-section-template--"]')&&
+document.querySelector('[id^="shopify-section-template--"]').after(b),a=b)}else
+if("undefined"!==typeof
+onCartx&&""!=onCartx.oncartx_domain){if(document.getElementById("dropi-review-app"))return;a||("Tema-MVSE-5.0.1"==onCartx.theme.name&&document.querySelector('[data-section-type="product"]')?document.querySelector('[data-section-type="product"]').after(b):"Copy-of-rocket-new"==onCartx.theme.name&&document.getElementById("cartpanda-product-reviews")?document.getElementById("cartpanda-product-reviews").before(b):
+(onCartx?.theme?.name?.includes("astron-cartpanda")||"forfithealth"==onCartx.oncartx_domain)&&document.querySelector(".cartx-section.section")?(b.style="margin-top:
+40px;",document.querySelector(".cartx-section.section").after(b)):"raphali"==onCartx.oncartx_domain&&document.getElementById("cartpanda-product-reviews")?document.getElementById("cartpanda-product-reviews").before(b):"viva-leve"==onCartx.oncartx_domain&&document.querySelector(".quotes-slider__text")?(b.style="padding-bottom:
+40px;",document.querySelector(".quotes-slider__text").after(b)):
+"decorissimo"==onCartx.oncartx_domain&&document.querySelector(".customer_reviews_container")?document.querySelector(".customer_reviews_container").append(b):"wegons"==onCartx.oncartx_domain&&document.querySelector(".content-page")?(document.querySelector(".content-page").style="margin-bottom:40px;",document.querySelector(".content-page").after(b)):document.querySelector(".product-single")?(document.querySelector(".product-single").style="margin-bottom:40px;",document.querySelector(".product-single").after(b)):
+document.querySelector("#page_name")?(document.querySelector("#page_name").style="margin-bottom:40px;",document.querySelector("#page_name").after(b)):onCartx?.theme?.name?.includes("Convertex-5.0")&&document.getElementById("main-inner")?document.getElementById("main-inner").append(b):document.querySelector("#cartx-section-product-template")?(document.querySelector("#cartx-section-product-template").style="margin-bottom:40px;",document.querySelector("#cartx-section-product-template").after(b)):document.getElementById("product-reviews")?
+document.getElementById("product-reviews").after(b):document.getElementById("cartpanda-product-reviews")&&document.getElementById("cartpanda-product-reviews").before(b),a=b)}else
+if("undefined"!==typeof
+dooca&&""!=dooca.shop_id){if(document.getElementById("dropi-review-app"))return;a||(document.querySelector(".NETREVIEWS_PRODUCT_REVIEWS")?.after(b),a=b)}else
+if("undefined"!==typeof
+LPQV&&window.baseStore){if(document.getElementById("dropi-review-app"))return;document.querySelector("#tab-avaliacoes")?.before(b);
+a=b}else if("undefined"!==typeof
+WapStore&&WapStore?.produto?.id){if(document.getElementById("dropi-review-app"))return;document.querySelector("#boxPerguntaResposta")?.before(b);a=b}else
+if("undefined"!==typeof
+Yampi){if(document.getElementById("dropi-review-app"))return;b.style="margin-top:
+32px;";document.querySelector(".product-specifications
+.container")?.after(b);a=b}else if(a)a.before(b),a=b;else
+if(a=document.getElementById("dropi-review-app"),!a){b.style.marginTop="100px";var
+h=document.querySelector("#related-products");
+h?h.before(b):(h=document.querySelector(".fb-comments"))?h.after(b):document.querySelector("#single-product").appendChild(b);a=b}}a.innerHTML=`
+<style type="text/css">
+  .dropi-card {
+    max-width: 292.09px !important;
+    min-width: 292.09px !important;
+    flex: 1 !important;
+    border-radius: 5px !important;
+    min-height: fit-content !important;
+    background: white !important;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1) !important;
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0px 0px 10px 0pxrgba (0, 0, 0, 0.1) !important;
+  }
+
+  .dropi-title {
+    padding: 0 16px !important;
+    text-transform: capitalize !important;
+  }
+
+  .dropi-card-text-color {
+    color: #333333 !important;
+  }
+
+  .dropi-star-view {
+    display: flex !important;
+    width: 90px !important;
+    height: 16px !important;
+    overflow: hidden !important;
+    background: url(https://empreender.nyc3.digitaloceanspaces.com/dr/img/star-gray.svg)
+      repeat-x !important;
+    background-size: contain !important;
+  }
+
+  .dropi-star-view > span {
+    display: inline-block !important;
+    height: 16px !important;
+    background: url(https://empreender.nyc3.digitaloceanspaces.com/dr/img/star-yellow.svg)
+      repeat-x !important;
+    background-size: contain !important;
+  }
+
+  .dropi-link-imagem {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    position: relative !important;
+  }
+
+  .dropi-link-imagem:hover {
+    background-color: #18b8fd !important;
+    border-radius: 5px !important;
+  }
+
+  .dropi-link-imagem > img {
+    background: #eaf3fd !important;
+    min-width: 260.08px !important;
+    max-width: 260.08px !important;
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    border-radius: 5px !important;
+  }
+
+  .dropi-link-imagem > img:hover {
+    opacity: 0.8 !important;
+  }
+  .lb-data .lb-close {
+    display: none !important;
+  }
+  .fslightbox-open {
+    overflow: unset !important;
+  }
+</style>
+
+<section
+  style="
+    display: flex;
+    width: 100%;
+    max-width: 1270px;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 35px;
+  "
+>
+  <div style="margin-bottom: 30px">
+    ${null==m?""!=c.rev_title?"
+    <h2>"+c.rev_title+"</h2>
+    ":"":""}
+  </div>
+  <div
+    style="
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    "
+  >
+    ${d.map(g=>`
+    <div class="dropi-card">
+      <div style="width: fit-content; padding: 16px">
+        ${g.imagens_selecionadas.map((k,n)=>`
+        <a
+          data-fslightbox="images-group-${g.id_avaliacao_aliexpress}"
+          data-dr-event-name="click_image_review"
+          data-dr-send-event-onclick="${JSON.stringify({product_id:`${e.product_id}`,review_id:`${g.id_avaliacao_aliexpress}`,image_url:k,name:g.nome_pessoa,message:g.mensagem,stars:`${g.qtd_estrelas}`,date:g.data_avaliacao})}"
+          class="dropi-link-imagem"
+          href="${k}"
+        >
+          <img referrerpolicy="no-referrer"
+          style="display:${0==n?"block;":"none;"}" src="${k}"/>
+        </a>
+        `).join("")}
+      </div>
+      <h4 class="dropi-title dropi-card-text-color" style="margin-bottom: auto">
+        ${g.nome_pessoa}
+      </h4>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 16px;
+        "
+      >
+        <span class="dropi-star-view"
+          ><span style="width:${20*g.qtd_estrelas}%"></span
+        ></span>
+        ${"0"==c.rev_show_data?"":`
+        <p class="dropi-card-text-color" style="margin: 0">
+          ${g.data_avaliacao}
+        </p>
+        `}
+      </div>
+      <div class="dropi-card-text-color" style="padding: 16px">
+        ${g.mensagem}
+      </div>
+    </div>
+    `).join("")}
+  </div>
+</section>
+`;document.querySelectorAll("[data-dr-send-event-onclick]").forEach(g=>{g.addEventListener("click",function(){let
+k=g.dataset.drEventName;if(k&&(q(k,`${e.ref1_id}`,`${e.ref2_id?e.ref2_id:""}`,g.dataset.drSendEventOnclick),e.customer_id)){let
+n={store_id:e.ref1_id,platform:e.ref2_id,customer_id:e.customer_id,evt_location:window.location.href,message:{text:"Clicou
+na avalia\u00e7\u00e3o do produto"}};e.product_name&&(n.message={text:"Clicou na
+avalia\u00e7\u00e3o do produto [PRODUTO]",params:{"[PRODUTO]":e.product_name}});
+r(k,n)}})});if(b=document.getElementById("average-review-container")){const
+g=document.querySelector('a[data-target="#collapse-tab2"]');b.addEventListener("click",function(){g&&g.click();window.scrollTo(0,a.offsetTop-100)})}refreshFsLightbox()})}})()})();
