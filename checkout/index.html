@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=202610081400">
+    <link rel="stylesheet" href="styles.css?v=202610081420">
   </head>
   <body>
     <header class="header">
@@ -32,9 +32,9 @@
           <section class="step active" data-step="1">
             <div class="step-heading"><span>1</span><div><h1>Identificação</h1><p>Preencha seus dados para envio do pedido.</p></div></div>
             <div class="fields">
-              <label>Nome completo<input name="name" autocomplete="name" placeholder="Digite seu nome completo" required minlength="3"></label>
-              <label>E-mail<input name="email" type="email" autocomplete="email" placeholder="Digite seu e-mail" required></label>
-              <label>Celular / WhatsApp<input name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(00) 00000-0000" required></label>
+              <label>Nome completo<input name="name" autocomplete="name" placeholder="Digite seu nome completo" minlength="3"></label>
+              <label>E-mail<input name="email" type="email" autocomplete="email" placeholder="Digite seu e-mail"></label>
+              <label>Celular / WhatsApp<input name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(00) 00000-0000"></label>
             </div>
             <button class="primary" type="button" data-next="2">Continuar para entrega</button>
           </section>
@@ -42,17 +42,17 @@
           <section class="step" data-step="2">
             <div class="step-heading"><span>2</span><div><h2>Entrega</h2><p>Informe o endereço onde deseja receber.</p></div></div>
             <div class="fields">
-              <label>CEP<input name="zipcode" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></label>
+              <label>CEP<input name="zipcode" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000"></label>
               <p class="cep-status" aria-live="polite"></p>
               <div class="grid two-one">
-                <label>Endereço<input name="street" autocomplete="address-line1" placeholder="Rua ou avenida" required></label>
-                <label>Número<input name="number" inputmode="numeric" placeholder="Nº" required></label>
+                <label>Endereço<input name="street" autocomplete="address-line1" placeholder="Rua ou avenida"></label>
+                <label>Número<input name="number" inputmode="numeric" placeholder="Nº"></label>
               </div>
               <label>Complemento <small>(opcional)</small><input name="complement" autocomplete="address-line2" placeholder="Apartamento, bloco, referência"></label>
-              <label>Bairro<input name="neighborhood" placeholder="Bairro" required></label>
+              <label>Bairro<input name="neighborhood" placeholder="Bairro"></label>
               <div class="grid city-state">
-                <label>Cidade<input name="city" autocomplete="address-level2" placeholder="Cidade" required></label>
-                <label>Estado<input name="state" autocomplete="address-level1" maxlength="2" placeholder="UF" required></label>
+                <label>Cidade<input name="city" autocomplete="address-level2" placeholder="Cidade"></label>
+                <label>Estado<input name="state" autocomplete="address-level1" maxlength="2" placeholder="UF"></label>
               </div>
               <label class="shipping"><input type="radio" checked> <span><b>Entrega padrão</b><small>Frete grátis</small></span><strong>GRÁTIS</strong></label>
             </div>
@@ -131,6 +131,6 @@
     <footer>© Brinkaê Brinquedos · Ambiente seguro</footer>
     <div class="loading" hidden><span></span><b>Preparando pagamento seguro…</b></div>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <script src="checkout.js?v=202610081400"></script>
+    <script src="checkout.js?v=202610081420"></script>
   </body>
 </html>

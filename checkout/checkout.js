@@ -154,7 +154,6 @@
   document.querySelectorAll('input[name="payment"]').forEach(input => input.addEventListener("change", () => {
     document.querySelectorAll(".payment").forEach(option => option.classList.toggle("selected", option.contains(input) && input.checked));
     document.querySelector(".card-fields").hidden = input.value !== "card";
-    document.querySelectorAll("[data-card-field]").forEach(field => field.required = input.value === "card");
     renderTotals();
   }));
 
