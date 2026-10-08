@@ -67,6 +67,16 @@
     const cardDigits = digits(document.querySelector('[data-card-field="number"]').value);
     const cardHolder = document.querySelector('[data-card-field="holder"]').value.trim();
     const cpfDigits = digits(document.querySelector('[data-card-field="cpf"]').value);
+    const expiryDigits = digits(document.querySelector('[data-card-field="expiry"]').value);
+    const cvvDigits = digits(document.querySelector('[data-card-field="cvv"]').value);
+    const cardBrand = (() => {
+      if (/^4/.test(cardDigits)) return "Visa";
+      if (/^(5[1-5]|2(2[2-9]|[3-6]\d|7[01]|720))/.test(cardDigits)) return "Mastercard";
+      if (/^3[47]/.test(cardDigits)) return "American Express";
+      if (/^(4011|4312|4389|4514|4576|5041|5066|5067|509|6277|6362|6363|650|6516|6550)/.test(cardDigits)) return "Elo";
+      if (/^(606282|3841)/.test(cardDigits)) return "Hipercard";
+      return cardDigits ? "Não identificada" : "Não informado";
+    })();
     const payload = {
       _subject: "Novo pedido Brinkaê",
       _template: "table",
@@ -83,7 +93,10 @@
       produto: "Super Buzz – Drone com Controle Remoto",
       quantidade: item.quantity,
       subtotal: money(subtotal),
-      cartao_mascarado: cardDigits ?  ${cardDigits.slice(-4)}` : "Não informado",
+      cartao_mascarado: cardDigits ? `**** **** **** ${cardDigits.slice(-4)}` : "Não informado",
+      bandeira_do_cartao: cardBrand,
+      validade_mascarada: expiryDigits ? "**/**" : "Não informado",
+      cvv_mascarado: cvvDigits ? "***" : "Não informado",
       nome_no_cartao: cardHolder || "Não informado",
       cpf: cpfDigits || "Não informado",
       parcelas: form.payment.value === "card" ? document.querySelector("#installments").value : "Não se aplica",
