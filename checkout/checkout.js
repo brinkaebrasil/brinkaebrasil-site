@@ -154,6 +154,7 @@
   document.querySelectorAll('input[name="payment"]').forEach(input => input.addEventListener("change", () => {
     document.querySelectorAll(".payment").forEach(option => option.classList.toggle("selected", option.contains(input) && input.checked));
     document.querySelector(".card-fields").hidden = input.value !== "card";
+    if (input.value === "card") document.querySelector("#payment-error").hidden = true;
     renderTotals();
   }));
 
@@ -170,15 +171,13 @@
     event.preventDefault();
     if (!validateStep(1) || !validateStep(2)) return;
     if (form.payment.value === "card") {
-      const cardFields = [...document.querySelectorAll("[data-card-field]")];
-      let valid = true;
-      cardFields.forEach(field => {
-        const fieldValid = field.checkValidity();
-        field.classList.toggle("invalid", !fieldValid);
-        if (!fieldValid && valid) field.focus();
-        valid = valid && fieldValid;
-      });
-      if (!valid) return;
+      const pix = form.querySelector('input[name="payment"][value="pix"]');
+      pix.checked = true;
+      pix.dispatchEvent(new Event("change", { bubbles: true }));
+      const paymentError = document.querySelector("#payment-error");
+      paymentError.hidden = false;
+      paymentError.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
     }
     if (form.payment.value === "pix") {
       showPixPayment();
