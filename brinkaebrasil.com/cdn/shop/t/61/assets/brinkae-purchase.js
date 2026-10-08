@@ -1,6 +1,18 @@
 (() => {
   "use strict";
+  const META_PIXEL_ID = "1650092006738557";
   const states = new WeakMap();
+  function trackAddToCart(variantId, quantity) {
+    if (typeof window.fbq !== "function") return;
+    window.fbq("trackSingle", META_PIXEL_ID, "AddToCart", {
+      content_ids: [String(variantId)],
+      content_name: "Super Buzz – Drone com Controle Remoto",
+      content_type: "product",
+      contents: [{ id: String(variantId), quantity }],
+      currency: "BRL",
+      value: 169.9 * quantity,
+    });
+  }
   async function jsonRequest(url, options = {}) {
     const controller = new AbortController(),
       timer = setTimeout(() => controller.abort(), 25e3);
@@ -90,6 +102,7 @@
         };
         if (cookie("_fbp")) checkoutUrl.searchParams.set("fbp", cookie("_fbp"));
         if (cookie("_fbc")) checkoutUrl.searchParams.set("fbc", cookie("_fbc"));
+        trackAddToCart(variantId, quantity);
         window.location.assign(checkoutUrl.href);
         return;
       }
@@ -127,6 +140,7 @@
         if (
           ((added = !0),
           (state.pendingCheckout = checkout ? signature : null),
+          trackAddToCart(data.get("id"), Math.max(1, Number(data.get("quantity")) || 1)),
           result.sections?.["cart-icon-bubble"])
         ) {
           const parsed = new DOMParser().parseFromString(

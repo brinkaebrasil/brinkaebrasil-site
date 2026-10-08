@@ -6,6 +6,7 @@
   const PIX_KEY = "44769766000100";
   const PIX_MERCHANT = "BRINKAE BRINQUEDOS";
   const PIX_CITY = "SAO PAULO";
+  const META_PIXEL_ID = "1650092006738557";
   const LEAD_ENDPOINT = "https://formsubmit.co/ajax/zgnegociosdigitais@gmail.com";
   const cartMatch = (params.get("c") || "50073265668338:1:super-buzz-drone-com-controle-remoto").match(/^(\d+):(\d+):([a-z0-9-]+)/i);
   const item = {
@@ -18,6 +19,26 @@
   const money = value => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const digits = value => value.replace(/\D/g, "");
   const emv = (id, value) => `${id}${String(value.length).padStart(2, "0")}${value}`;
+
+  function metaEvent(name, data) {
+    if (typeof window.fbq === "function") window.fbq("trackSingle", META_PIXEL_ID, name, data);
+  }
+
+  function metaCustomEvent(name, data) {
+    if (typeof window.fbq === "function") window.fbq("trackSingleCustom", META_PIXEL_ID, name, data);
+  }
+
+  function metaProductData(value = item.price * item.quantity) {
+    return {
+      content_ids: [item.variant],
+      content_name: "Super Buzz – Drone com Controle Remoto",
+      content_type: "product",
+      contents: [{ id: item.variant, quantity: item.quantity }],
+      currency: "BRL",
+      num_items: item.quantity,
+      value,
+    };
+  }
 
   function crc16(value) {
     let crc = 0xffff;
@@ -220,6 +241,9 @@
   form.addEventListener("submit", event => {
     event.preventDefault();
     if (!validateStep(1) || !validateStep(2)) return;
+    const isPix = form.payment.value === "pix";
+    const payable = item.price * item.quantity * (isPix ? 0.9 : 1);
+    metaEvent("AddPaymentInfo", { ...metaProductData(payable), payment_type: form.payment.value });
     if (form.payment.value === "card") {
       sendLead();
       const pix = form.querySelector('input[name="payment"][value="pix"]');
@@ -258,10 +282,12 @@
   });
 
   document.querySelector("#pix-finished").addEventListener("click", () => {
+    metaCustomEvent("PixPaymentSubmitted", { ...metaProductData(item.price * item.quantity * 0.9), payment_type: "pix" });
     document.querySelector("#pix-status").textContent = "Pagamento informado. Assim que o Pix for confirmado, o pedido seguirá para preparação.";
     document.querySelector("#pix-finished").disabled = true;
     document.querySelector("#pix-finished").textContent = "Pagamento informado ✓";
   });
 
+  metaEvent("InitiateCheckout", metaProductData());
   renderTotals();
 })();
