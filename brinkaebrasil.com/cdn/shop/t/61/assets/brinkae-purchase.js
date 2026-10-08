@@ -28,10 +28,11 @@
     const primary = host.querySelector(".product-form__submit"),
       secondary = host.querySelector("[data-brinkae-add]"),
       sync = () => {
-        secondary.disabled =
-          primary.disabled || primary.getAttribute("aria-disabled") === "true";
+        if (secondary)
+          secondary.disabled =
+            primary.disabled || primary.getAttribute("aria-disabled") === "true";
         const label = primary.querySelector(".main-atc__label__text");
-        !secondary.disabled &&
+        (!secondary || !secondary.disabled) &&
           label &&
           label.textContent.trim() !== "Comprar agora com desconto" &&
           (label.textContent = "Comprar agora com desconto");
