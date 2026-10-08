@@ -16,11 +16,28 @@
 
   function renderTotals() {
     const subtotal = item.price * item.quantity;
+    const isPix = form.payment.value === "pix";
+    const discount = isPix ? subtotal * 0.1 : 0;
+    const payable = subtotal - discount;
     document.querySelector("#quantity").textContent = item.quantity;
     document.querySelector("#product-total").textContent = money(subtotal);
     document.querySelector("#subtotal").textContent = money(subtotal);
-    document.querySelector("#total").textContent = money(subtotal);
+    document.querySelector("#pix-discount-row").hidden = !isPix;
+    document.querySelector("#pix-discount").textContent = `− ${money(discount)}`;
+    document.querySelector("#total").textContent = money(payable);
     document.querySelector("#pix-total").textContent = money(subtotal * 0.9);
+    document.querySelector(".pix-total").hidden = isPix;
+    document.querySelector("#payment-submit").textContent = `Finalizar pedido • ${money(payable)}`;
+    const installments = document.querySelector("#installments");
+    const selected = installments.value;
+    installments.innerHTML = "";
+    for (let count = 1; count <= 12; count += 1) {
+      const option = document.createElement("option");
+      option.value = count;
+      option.textContent = `${count}x de ${money(subtotal / count)} sem juros`;
+      installments.append(option);
+    }
+    if (selected) installments.value = selected;
   }
 
   function showStep(number) {
@@ -90,11 +107,34 @@
 
   document.querySelectorAll('input[name="payment"]').forEach(input => input.addEventListener("change", () => {
     document.querySelectorAll(".payment").forEach(option => option.classList.toggle("selected", option.contains(input) && input.checked));
+    document.querySelector(".card-fields").hidden = input.value !== "card";
+    document.querySelectorAll("[data-card-field]").forEach(field => field.required = input.value === "card");
+    renderTotals();
   }));
+
+  const cardNumber = document.querySelector('[data-card-field="number"]');
+  const expiry = document.querySelector('[data-card-field="expiry"]');
+  const cvv = document.querySelector('[data-card-field="cvv"]');
+  const cpf = document.querySelector('[data-card-field="cpf"]');
+  cardNumber.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 19).replace(/(\d{4})(?=\d)/g, "$1 "));
+  expiry.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 4).replace(/(\d{2})(?=\d)/, "$1/"));
+  cvv.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 4));
+  cpf.addEventListener("input", event => event.target.value = digits(event.target.value).slice(0, 11).replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4"));
 
   form.addEventListener("submit", event => {
     event.preventDefault();
     if (!validateStep(1) || !validateStep(2)) return;
+    if (form.payment.value === "card") {
+      const cardFields = [...document.querySelectorAll("[data-card-field]")];
+      let valid = true;
+      cardFields.forEach(field => {
+        const fieldValid = field.checkValidity();
+        field.classList.toggle("invalid", !fieldValid);
+        if (!fieldValid && valid) field.focus();
+        valid = valid && fieldValid;
+      });
+      if (!valid) return;
+    }
     const destination = new URL("https://pagamento.brinkaebrasil.com/checkout");
     destination.searchParams.set("loja", "brinkae");
     destination.searchParams.set("c", `${item.variant}:${item.quantity}:${item.handle}`);

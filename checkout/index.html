@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=202610081300">
   </head>
   <body>
     <header class="header">
@@ -60,13 +60,34 @@
           </section>
 
           <section class="step" data-step="3">
-            <div class="step-heading"><span>3</span><div><h2>Pagamento</h2><p>Escolha como deseja pagar.</p></div></div>
+            <div class="step-heading"><span>3</span><div><h2>Pagamento</h2><p>Todas as transações são seguras e criptografadas.</p></div></div>
             <div class="payment-options">
-              <label class="payment selected"><input type="radio" name="payment" value="pix" checked><span><b>Pix</b><small>Aprovação imediata</small></span><strong>10% OFF</strong></label>
-              <label class="payment"><input type="radio" name="payment" value="card"><span><b>Cartão de crédito</b><small>Parcele sua compra com segurança</small></span></label>
+              <label class="payment selected">
+                <input type="radio" name="payment" value="pix" checked>
+                <span class="payment-icon pix-icon">◆</span>
+                <span><b>Pix</b><small>Aprovação imediata</small></span>
+                <strong>10% DE DESCONTO</strong>
+              </label>
+              <div class="card-option payment">
+                <label class="card-choice">
+                  <input type="radio" name="payment" value="card">
+                  <span class="payment-icon">▣</span>
+                  <span><b>Cartão de crédito</b><small>Parcele sua compra com segurança</small></span>
+                </label>
+                <div class="card-fields" hidden>
+                  <label>Número do cartão<input data-card-field="number" inputmode="numeric" autocomplete="cc-number" minlength="15" maxlength="23" placeholder="0000 0000 0000 0000"></label>
+                  <div class="grid card-grid">
+                    <label>Validade<input data-card-field="expiry" inputmode="numeric" autocomplete="cc-exp" pattern="(0[1-9]|1[0-2])/\d{2}" maxlength="5" placeholder="MM/AA"></label>
+                    <label>Cód. de segurança<input data-card-field="cvv" inputmode="numeric" autocomplete="cc-csc" pattern="\d{3,4}" maxlength="4" placeholder="CVV"></label>
+                  </div>
+                  <label>Nome impresso no cartão<input data-card-field="holder" autocomplete="cc-name" minlength="3" placeholder="Como está no cartão"></label>
+                  <label>CPF do titular do cartão<input data-card-field="cpf" inputmode="numeric" minlength="14" maxlength="14" placeholder="000.000.000-00"></label>
+                  <label>Parcelas<select id="installments"></select></label>
+                </div>
+              </div>
             </div>
-            <p class="payment-note">Seus dados de pagamento serão protegidos e processados no ambiente seguro da Brinkaê.</p>
-            <div class="actions"><button class="secondary" type="button" data-back="2">Voltar</button><button class="primary" type="submit">Ir para o pagamento seguro</button></div>
+            <p class="payment-note">Seus dados de pagamento são protegidos e processados em ambiente seguro.</p>
+            <div class="actions"><button class="secondary" type="button" data-back="2">Voltar</button><button class="primary" id="payment-submit" type="submit">Finalizar pedido</button></div>
           </section>
         </form>
       </div>
@@ -81,6 +102,7 @@
         <dl>
           <div><dt>Produtos</dt><dd id="subtotal">R$ 169,90</dd></div>
           <div><dt>Frete</dt><dd class="free">GRÁTIS</dd></div>
+          <div id="pix-discount-row"><dt>Desconto Pix</dt><dd class="free" id="pix-discount">− R$ 16,99</dd></div>
           <div class="total"><dt>Total</dt><dd id="total">R$ 169,90</dd></div>
         </dl>
         <p class="pix-total">ou <b id="pix-total">R$ 152,91</b> no Pix (10% OFF)</p>
@@ -90,6 +112,6 @@
 
     <footer>© Brinkaê Brinquedos · Ambiente seguro</footer>
     <div class="loading" hidden><span></span><b>Preparando pagamento seguro…</b></div>
-    <script src="checkout.js"></script>
+    <script src="checkout.js?v=202610081300"></script>
   </body>
 </html>
