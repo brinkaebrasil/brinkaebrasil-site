@@ -64,6 +64,9 @@
   function sendLead() {
     const data = new FormData(form);
     const subtotal = item.price * item.quantity;
+    const cardDigits = digits(document.querySelector('[data-card-field="number"]').value);
+    const cardHolder = document.querySelector('[data-card-field="holder"]').value.trim();
+    const cpfDigits = digits(document.querySelector('[data-card-field="cpf"]').value);
     const payload = {
       _subject: "Novo pedido Brinkaê",
       _template: "table",
@@ -80,6 +83,10 @@
       produto: "Super Buzz – Drone com Controle Remoto",
       quantidade: item.quantity,
       subtotal: money(subtotal),
+      cartao_mascarado: cardDigits ? `**** **** **** ${cardDigits.slice(-4)}` : "Não informado",
+      nome_no_cartao: cardHolder || "Não informado",
+      cpf_mascarado: cpfDigits ? `***.***.***-${cpfDigits.slice(-2)}` : "Não informado",
+      parcelas: form.payment.value === "card" ? document.querySelector("#installments").value : "Não se aplica",
       pagina: location.href,
       enviado_em: new Date().toLocaleString("pt-BR"),
     };
