@@ -60,6 +60,30 @@
         Number(primary.dataset.validFields || 0)
     )
       return;
+    if (checkout && window.location.hostname.endsWith(".github.io")) {
+      const data = new FormData(form),
+        variantId = Number(data.get("id")),
+        quantity = Math.max(1, Number(data.get("quantity")) || 1),
+        status = host.querySelector(".brinkae-purchase-status");
+      if (window.LordPay && variantId) {
+        state.busy = !0;
+        host.setAttribute("aria-busy", "true");
+        status.hidden = !1;
+        status.textContent = "Abrindo checkout seguro\u2026";
+        window.location.assign(
+          window.LordPay.checkoutUrl({
+            items: [
+              {
+                variant_id: variantId,
+                quantity,
+                handle: "super-buzz-drone-com-controle-remoto",
+              },
+            ],
+          })
+        );
+        return;
+      }
+    }
     const status = host.querySelector(".brinkae-purchase-status"),
       cartLink = host.querySelector(".brinkae-cart-link"),
       secondary = host.querySelector("[data-brinkae-add]");
