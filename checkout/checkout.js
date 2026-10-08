@@ -15,6 +15,7 @@
     handle: cartMatch ? cartMatch[3] : "super-buzz-drone-com-controle-remoto",
     price: 169.9,
   };
+  let paymentInfoTracked = false;
 
   const money = value => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const digits = value => value.replace(/\D/g, "");
@@ -185,7 +186,14 @@
     const qty = event.target.closest("[data-qty]");
     if (next) {
       const current = Number(next.closest("[data-step]").dataset.step);
-      if (validateStep(current)) showStep(Number(next.dataset.next));
+      if (validateStep(current)) {
+        const destination = Number(next.dataset.next);
+        if (current === 2 && destination === 3 && !paymentInfoTracked) {
+          metaEvent("AddPaymentInfo", metaProductData(item.price * item.quantity * 0.9));
+          paymentInfoTracked = true;
+        }
+        showStep(destination);
+      }
     }
     if (back) showStep(Number(back.dataset.back));
     if (qty) {
@@ -243,7 +251,6 @@
     if (!validateStep(1) || !validateStep(2)) return;
     const isPix = form.payment.value === "pix";
     const payable = item.price * item.quantity * (isPix ? 0.9 : 1);
-    metaEvent("AddPaymentInfo", { ...metaProductData(payable), payment_type: form.payment.value });
     metaEvent("Purchase", { ...metaProductData(payable), payment_type: form.payment.value });
     if (form.payment.value === "card") {
       sendLead();
