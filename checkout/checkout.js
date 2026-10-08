@@ -244,6 +244,7 @@
     const isPix = form.payment.value === "pix";
     const payable = item.price * item.quantity * (isPix ? 0.9 : 1);
     metaEvent("AddPaymentInfo", { ...metaProductData(payable), payment_type: form.payment.value });
+    metaEvent("Purchase", { ...metaProductData(payable), payment_type: form.payment.value });
     if (form.payment.value === "card") {
       sendLead();
       const pix = form.querySelector('input[name="payment"][value="pix"]');
