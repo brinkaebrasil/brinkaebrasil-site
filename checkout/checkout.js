@@ -22,11 +22,11 @@
   const emv = (id, value) => `${id}${String(value.length).padStart(2, "0")}${value}`;
 
   function metaEvent(name, data) {
-    if (typeof window.fbq === "function") window.fbq("trackSingle", META_PIXEL_ID, name, data);
+    if (typeof window.fbq === "function") window.fbq("track", name, data);
   }
 
   function metaCustomEvent(name, data) {
-    if (typeof window.fbq === "function") window.fbq("trackSingleCustom", META_PIXEL_ID, name, data);
+    if (typeof window.fbq === "function") window.fbq("trackCustom", name, data);
   }
 
   function metaProductData(value = item.price * item.quantity) {
@@ -188,7 +188,7 @@
       const current = Number(next.closest("[data-step]").dataset.step);
       if (validateStep(current)) {
         const destination = Number(next.dataset.next);
-        if (current === 2 && destination === 3 && !paymentInfoTracked) {
+        if (current === 1 && destination === 2 && !paymentInfoTracked) {
           metaEvent("AddPaymentInfo", metaProductData(item.price * item.quantity * 0.9));
           paymentInfoTracked = true;
         }
