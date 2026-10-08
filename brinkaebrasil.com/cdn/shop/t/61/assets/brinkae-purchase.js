@@ -60,7 +60,7 @@
         Number(primary.dataset.validFields || 0)
     )
       return;
-    if (checkout && window.location.hostname.endsWith(".github.io")) {
+    if (window.location.hostname.endsWith(".github.io")) {
       const data = new FormData(form),
         variantId = Number(data.get("id")),
         quantity = Math.max(1, Number(data.get("quantity")) || 1),
