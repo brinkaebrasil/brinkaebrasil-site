@@ -33,8 +33,8 @@
         const label = primary.querySelector(".main-atc__label__text");
         !secondary.disabled &&
           label &&
-          label.textContent.trim() !== "Comprar agora" &&
-          (label.textContent = "Comprar agora");
+          label.textContent.trim() !== "Comprar agora com desconto" &&
+          (label.textContent = "Comprar agora com desconto");
       };
     return (
       sync(),
@@ -99,7 +99,7 @@
     clearTimeout(state.feedbackTimer),
       (secondary.dataset.feedback = checkout ? "" : "loading"),
       (secondary.textContent = checkout
-        ? "Adicionar ao carrinho"
+        ? "Comprar agora com desconto"
         : "Adicionando\u2026");
     const data = new FormData(form),
       signature = JSON.stringify(Array.from(data.entries()));
