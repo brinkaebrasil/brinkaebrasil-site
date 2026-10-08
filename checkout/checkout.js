@@ -3,6 +3,9 @@
 
   const form = document.querySelector("#checkout-form");
   const params = new URLSearchParams(location.search);
+  const PIX_KEY = "44769766000100";
+  const PIX_MERCHANT = "BRINKAE BRINQUEDOS";
+  const PIX_CITY = "SAO PAULO";
   const cartMatch = (params.get("c") || "50073265668338:1:super-buzz-drone-com-controle-remoto").match(/^(\d+):(\d+):([a-z0-9-]+)/i);
   const item = {
     variant: cartMatch ? cartMatch[1] : "50073265668338",
@@ -13,6 +16,49 @@
 
   const money = value => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const digits = value => value.replace(/\D/g, "");
+  const emv = (id, value) => `${id}${String(value.length).padStart(2, "0")}${value}`;
+
+  function crc16(value) {
+    let crc = 0xffff;
+    for (let index = 0; index < value.length; index += 1) {
+      crc ^= value.charCodeAt(index) << 8;
+      for (let bit = 0; bit < 8; bit += 1) crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+      crc &= 0xffff;
+    }
+    return crc.toString(16).toUpperCase().padStart(4, "0");
+  }
+
+  function pixPayload(amount) {
+    const account = emv("00", "BR.GOV.BCB.PIX") + emv("01", PIX_KEY);
+    const txid = `BRK${Date.now()}`.slice(0, 25);
+    const data = [
+      emv("00", "01"),
+      emv("26", account),
+      emv("52", "0000"),
+      emv("53", "986"),
+      emv("54", amount.toFixed(2)),
+      emv("58", "BR"),
+      emv("59", PIX_MERCHANT),
+      emv("60", PIX_CITY),
+      emv("62", emv("05", txid)),
+      "6304",
+    ].join("");
+    return data + crc16(data);
+  }
+
+  function showPixPayment() {
+    const amount = Math.round(item.price * item.quantity * 0.9 * 100) / 100;
+    const payload = pixPayload(amount);
+    document.querySelector("#checkout-form").hidden = true;
+    document.querySelector(".progress").hidden = true;
+    document.querySelector("#pix-payment").hidden = false;
+    document.querySelector("#pix-payment-amount").textContent = money(amount);
+    document.querySelector("#pix-code").value = payload;
+    const qr = document.querySelector("#pix-qr");
+    qr.innerHTML = "";
+    new QRCode(qr, { text: payload, width: 220, height: 220, colorDark: "#111827", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+    scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   function renderTotals() {
     const subtotal = item.price * item.quantity;
@@ -135,6 +181,10 @@
       });
       if (!valid) return;
     }
+    if (form.payment.value === "pix") {
+      showPixPayment();
+      return;
+    }
     const destination = new URL("https://pagamento.brinkaebrasil.com/checkout");
     destination.searchParams.set("loja", "brinkae");
     destination.searchParams.set("c", `${item.variant}:${item.quantity}:${item.handle}`);
@@ -144,6 +194,23 @@
     destination.searchParams.set("metodo", new FormData(form).get("payment"));
     document.querySelector(".loading").hidden = false;
     location.assign(destination.href);
+  });
+
+  document.querySelector("#copy-pix").addEventListener("click", async () => {
+    const code = document.querySelector("#pix-code");
+    try {
+      await navigator.clipboard.writeText(code.value);
+    } catch {
+      code.select();
+      document.execCommand("copy");
+    }
+    document.querySelector("#copy-pix").textContent = "Código Pix copiado ✓";
+  });
+
+  document.querySelector("#pix-finished").addEventListener("click", () => {
+    document.querySelector("#pix-status").textContent = "Pagamento informado. Assim que o Pix for confirmado, o pedido seguirá para preparação.";
+    document.querySelector("#pix-finished").disabled = true;
+    document.querySelector("#pix-finished").textContent = "Pagamento informado ✓";
   });
 
   renderTotals();

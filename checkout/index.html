@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=202610081300">
+    <link rel="stylesheet" href="styles.css?v=202610081400">
   </head>
   <body>
     <header class="header">
@@ -90,6 +90,24 @@
             <div class="actions"><button class="secondary" type="button" data-back="2">Voltar</button><button class="primary" id="payment-submit" type="submit">Finalizar pedido</button></div>
           </section>
         </form>
+
+        <section class="pix-payment" id="pix-payment" hidden>
+          <div class="pix-success-icon">✓</div>
+          <h2>Finalize o pagamento via Pix</h2>
+          <p>Abra o aplicativo do seu banco, escolha pagar com Pix e escaneie o QR Code.</p>
+          <div id="pix-qr" aria-label="QR Code Pix"></div>
+          <strong class="pix-amount" id="pix-payment-amount">R$ 0,00</strong>
+          <ol class="pix-instructions">
+            <li>Abra o app do seu banco e entre na área Pix.</li>
+            <li>Escolha <b>Pix Copia e Cola</b> ou leia o QR Code.</li>
+            <li>Confira o valor e o recebedor antes de confirmar.</li>
+            <li>Depois do pagamento, clique no botão abaixo.</li>
+          </ol>
+          <label class="pix-code-label">Código Pix Copia e Cola<textarea id="pix-code" readonly></textarea></label>
+          <button class="secondary copy-pix" id="copy-pix" type="button">Copiar código Pix</button>
+          <button class="primary" id="pix-finished" type="button">Já fiz o pagamento</button>
+          <p class="pix-status" id="pix-status" aria-live="polite"></p>
+        </section>
       </div>
 
       <aside class="summary">
@@ -112,6 +130,7 @@
 
     <footer>© Brinkaê Brinquedos · Ambiente seguro</footer>
     <div class="loading" hidden><span></span><b>Preparando pagamento seguro…</b></div>
-    <script src="checkout.js?v=202610081300"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="checkout.js?v=202610081400"></script>
   </body>
 </html>

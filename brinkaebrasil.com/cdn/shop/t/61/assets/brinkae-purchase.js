@@ -75,7 +75,7 @@
           "c",
           `${variantId}:${quantity}:super-buzz-drone-com-controle-remoto`
         );
-        checkoutUrl.searchParams.set("v", "202610081300");
+        checkoutUrl.searchParams.set("v", "202610081400");
         const trackingKeys = [
           "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
           "src", "sck", "fbclid", "gclid", "ttclid"
