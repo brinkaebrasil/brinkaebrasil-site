@@ -13,7 +13,7 @@
     variant: cartMatch ? cartMatch[1] : "50073265668338",
     quantity: cartMatch ? Math.max(1, Number(cartMatch[2])) : 1,
     handle: cartMatch ? cartMatch[3] : "super-buzz-drone-com-controle-remoto",
-    price: 169.9,
+    price: 109.9,
   };
   let paymentInfoTracked = false;
 

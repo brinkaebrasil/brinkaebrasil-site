@@ -10,7 +10,7 @@
       content_type: "product",
       contents: [{ id: String(variantId), quantity }],
       currency: "BRL",
-      value: 169.9 * quantity,
+      value: 109.9 * quantity,
     });
   }
   async function jsonRequest(url, options = {}) {
