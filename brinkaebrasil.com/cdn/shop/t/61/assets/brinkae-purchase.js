@@ -1,10 +1,9 @@
 (() => {
   "use strict";
-  const META_PIXEL_ID = "2904921186542734";
   const states = new WeakMap();
   function trackAddToCart(variantId, quantity) {
     if (typeof window.fbq !== "function") return;
-    window.fbq("trackSingle", META_PIXEL_ID, "AddToCart", {
+    window.fbq("track", "AddToCart", {
       content_ids: [String(variantId)],
       content_name: "Super Buzz – Drone com Controle Remoto",
       content_type: "product",
