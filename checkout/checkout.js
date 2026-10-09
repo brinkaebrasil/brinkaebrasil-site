@@ -6,7 +6,6 @@
   const PIX_KEY = "44769766000100";
   const PIX_MERCHANT = "BRINKAE BRINQUEDOS";
   const PIX_CITY = "SAO PAULO";
-  const META_PIXEL_ID = "1650092006738557";
   const LEAD_ENDPOINT = "https://formsubmit.co/ajax/zgnegociosdigitais@gmail.com";
   const cartMatch = (params.get("c") || "50073265668338:1:super-buzz-drone-com-controle-remoto").match(/^(\d+):(\d+):([a-z0-9-]+)/i);
   const item = {
