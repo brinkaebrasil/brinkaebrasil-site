@@ -71,7 +71,24 @@
                 <label>Cidade<input name="city" autocomplete="address-level2" placeholder="Cidade"></label>
                 <label>Estado<input name="state" autocomplete="address-level1" maxlength="2" placeholder="UF"></label>
               </div>
-              <label class="shipping"><input type="radio" checked> <span><b>Entrega padrão</b><small>Frete grátis</small></span><strong>GRÁTIS</strong></label>
+              <div class="shipping-options" role="group" aria-label="Opções de entrega">
+                <label class="shipping selected">
+                  <input type="radio" name="shipping" value="standard" data-cost="0" checked>
+                  <svg class="shipping-logo" viewBox="0 0 104 32" role="img" aria-label="Correios" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#F5C400" d="M2 8h22l10 8-10 8H2l10-8z"/><path fill="#1457A6" d="M12 3h22l10 8-10 8H12l10-8z"/><path fill="#F5C400" d="M2 16h22l10 8-10 8H2l10-8z"/>
+                    <text x="46" y="21" fill="#1457A6" font-family="Arial,sans-serif" font-size="11" font-weight="700">CORREIOS</text>
+                  </svg>
+                  <span><b>Entrega padrão</b><small>3 a 5 dias úteis</small></span><strong>GRÁTIS</strong>
+                </label>
+                <label class="shipping">
+                  <input type="radio" name="shipping" value="sedex" data-cost="19.99">
+                  <svg class="shipping-logo" viewBox="0 0 104 32" role="img" aria-label="Correios" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#F5C400" d="M2 8h22l10 8-10 8H2l10-8z"/><path fill="#1457A6" d="M12 3h22l10 8-10 8H12l10-8z"/><path fill="#F5C400" d="M2 16h22l10 8-10 8H2l10-8z"/>
+                    <text x="46" y="21" fill="#1457A6" font-family="Arial,sans-serif" font-size="11" font-weight="700">CORREIOS</text>
+                  </svg>
+                  <span><b>Entrega via Sedex</b><small>Chega amanhã</small></span><strong>R$ 19,99</strong>
+                </label>
+              </div>
             </div>
             <div class="actions"><button class="secondary" type="button" data-back="1">Voltar</button><button class="primary" type="button" data-next="3">Continuar para pagamento</button></div>
           </section>
@@ -137,7 +154,7 @@
         </div>
         <dl>
           <div><dt>Produtos</dt><dd id="subtotal">R$ 109,90</dd></div>
-          <div><dt>Frete</dt><dd class="free">GRÁTIS</dd></div>
+          <div><dt>Frete</dt><dd class="free" id="shipping-total">GRÁTIS</dd></div>
           <div id="pix-discount-row"><dt>Desconto Pix</dt><dd class="free" id="pix-discount">− R$ 10,99</dd></div>
           <div class="total"><dt>Total</dt><dd id="total">R$ 109,90</dd></div>
         </dl>

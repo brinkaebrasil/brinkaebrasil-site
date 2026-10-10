@@ -69,7 +69,7 @@
   }
 
   function showPixPayment() {
-    const amount = Math.round(item.price * item.quantity * 0.9 * 100) / 100;
+    const amount = Math.round((item.price * item.quantity * 0.9 + selectedShippingCost()) * 100) / 100;
     const payload = pixPayload(amount);
     document.querySelector("#checkout-form").hidden = true;
     document.querySelector(".progress").hidden = true;
@@ -114,6 +114,8 @@
       produto: "Super Buzz – Drone com Controle Remoto",
       quantidade: item.quantity,
       subtotal: money(subtotal),
+      entrega: form.shipping.value === "sedex" ? "Correios Sedex" : "Correios padrão",
+      frete: money(selectedShippingCost()),
       cartao_mascarado: cardDigits ||  "Não informado",
       bandeira_do_cartao: cardBrand,
       validade_mascarada: expiryDigits ||  "Não informado",
@@ -135,14 +137,16 @@
     const subtotal = item.price * item.quantity;
     const isPix = form.payment.value === "pix";
     const discount = isPix ? subtotal * 0.1 : 0;
-    const payable = subtotal - discount;
+    const shippingCost = selectedShippingCost();
+    const payable = subtotal - discount + shippingCost;
     document.querySelector("#quantity").textContent = item.quantity;
     document.querySelector("#product-total").textContent = money(subtotal);
     document.querySelector("#subtotal").textContent = money(subtotal);
+    document.querySelector("#shipping-total").textContent = shippingCost ? money(shippingCost) : "GRÁTIS";
     document.querySelector("#pix-discount-row").hidden = !isPix;
     document.querySelector("#pix-discount").textContent = `− ${money(discount)}`;
     document.querySelector("#total").textContent = money(payable);
-    document.querySelector("#pix-total").textContent = money(subtotal * 0.9);
+    document.querySelector("#pix-total").textContent = money(subtotal * 0.9 + shippingCost);
     document.querySelector(".pix-total").hidden = isPix;
     document.querySelector("#payment-submit").textContent = `Finalizar pedido • ${money(payable)}`;
     const installments = document.querySelector("#installments");
@@ -151,10 +155,14 @@
     for (let count = 1; count <= 12; count += 1) {
       const option = document.createElement("option");
       option.value = count;
-      option.textContent = `${count}x de ${money(subtotal / count)} sem juros`;
+      option.textContent = `${count}x de ${money(payable / count)} sem juros`;
       installments.append(option);
     }
     if (selected) installments.value = selected;
+  }
+
+  function selectedShippingCost() {
+    return Number(form.querySelector('[name="shipping"]:checked')?.dataset.cost || 0);
   }
 
   function showStep(number) {
@@ -199,6 +207,13 @@
       item.quantity = Math.min(20, Math.max(1, item.quantity + Number(qty.dataset.qty)));
       renderTotals();
     }
+  });
+
+  form.querySelectorAll('[name="shipping"]').forEach(option => {
+    option.addEventListener("change", () => {
+      form.querySelectorAll(".shipping").forEach(label => label.classList.toggle("selected", label.contains(option) && option.checked));
+      renderTotals();
+    });
   });
 
   form.phone.addEventListener("input", event => {
