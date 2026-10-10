@@ -12,6 +12,38 @@
       value: 109.9 * quantity,
     });
   }
+  function openGithubCheckout(form, host) {
+    const data = new FormData(form),
+      variantId = Number(data.get("id")),
+      quantity = Math.max(1, Number(data.get("quantity")) || 1);
+    if (!variantId) return;
+    const status = host?.querySelector(".brinkae-purchase-status");
+    if (status) {
+      status.hidden = !1;
+      status.textContent = "Abrindo checkout seguro…";
+    }
+    const checkoutUrl = new URL("../../checkout/", window.location.href);
+    checkoutUrl.searchParams.set(
+      "c",
+      `${variantId}:${quantity}:super-buzz-drone-com-controle-remoto`
+    );
+    checkoutUrl.searchParams.set("v", "202610081445");
+    const trackingKeys = [
+      "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+      "src", "sck", "fbclid", "gclid", "ttclid"
+    ];
+    new URLSearchParams(window.location.search).forEach((value, key) => {
+      if (trackingKeys.includes(key)) checkoutUrl.searchParams.set(key, value);
+    });
+    const cookie = name => {
+      const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+      return match ? decodeURIComponent(match[1]) : "";
+    };
+    if (cookie("_fbp")) checkoutUrl.searchParams.set("fbp", cookie("_fbp"));
+    if (cookie("_fbc")) checkoutUrl.searchParams.set("fbc", cookie("_fbc"));
+    trackAddToCart(variantId, quantity);
+    window.location.assign(checkoutUrl.href);
+  }
   async function jsonRequest(url, options = {}) {
     const controller = new AbortController(),
       timer = setTimeout(() => controller.abort(), 25e3);
@@ -196,15 +228,24 @@
       "click",
       (event) => {
         const button = event.target.closest(
-          "[data-brinkae-add], [data-brinkae-purchase] .product-form__submit"
+          "[data-brinkae-add], [data-brinkae-purchase] .product-form__submit, [id^='SectionAtcBtn-']"
         );
-        button &&
-          (event.preventDefault(),
-          event.stopImmediatePropagation(),
-          purchase(
-            button.closest("[data-brinkae-purchase]"),
-            !button.hasAttribute("data-brinkae-add")
-          ));
+        if (!button) return;
+        if (button.id.startsWith("SectionAtcBtn-")) {
+          if (!window.location.hostname.endsWith(".github.io")) return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          const form = document.querySelector('product-form[data-main="true"] form');
+          if (form?.reportValidity())
+            openGithubCheckout(form, document.querySelector("[data-brinkae-purchase]"));
+          return;
+        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        purchase(
+          button.closest("[data-brinkae-purchase]"),
+          !button.hasAttribute("data-brinkae-add")
+        );
       },
       !0
     );
